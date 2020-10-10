@@ -8,5 +8,5 @@ set -eo pipefail; [[ $TRACE ]] && set -x
 cat <<EOF
 ---
 default_process_types:
-  web: "cd public && python -m SimpleHTTPServer \$PORT"
+  web: "cd static && python -m SimpleHTTPServer \$PORT"
 EOF
