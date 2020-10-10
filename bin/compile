@@ -20,18 +20,18 @@ indent() {
   sed $SED_FLAG "$RE"
 }
 
-echo "\n-----> Using neuron v${NEURON_VERSION}"
+echo "-----> Using neuron v${NEURON_VERSION}"
 
 mkdir -p "$BUILD_DIR" "$CACHE_DIR"
 
 if ! [ -e "${CACHE_DIR}/${NEURON_TARBALL}" ]; then
-  echo "\n-----> Downloading package"
+  echo "-----> Downloading package"
   curl "$NEURON_PACKAGE" -Lso "${CACHE_DIR}/${NEURON_TARBALL}" | indent
 fi
 
-echo "\n-----> Extracting neuron binaries to ${BUILD_DIR}"
+echo "-----> Extracting neuron binaries to ${BUILD_DIR}"
 tar xzf "${CACHE_DIR}/${NEURON_TARBALL}" -C "$CACHE_DIR" | indent
 
-echo "\n-----> Building the site"
+echo "-----> Building the site"
 cd "$BUILD_DIR"
 "${CACHE_DIR}/neuron" rib -o static | indent
