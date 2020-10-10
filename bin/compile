@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+# vim: set ft=shell
+
+set -eo pipefail; [[ $TRACE ]] && set -x
+
+NEURON_VERSION=1.0.1.0
+NEURON_TARBALL="neuron-${NEURON_VERSION}-linux.tar.gz"
+NEURON_PACKAGE="https://public.srid.ca/list/${NEURON_TARBALL}"
+
+BUILD_DIR="$1"
+CACHE_DIR="$2"
+ENV_DIR="$3"
+
+# Used to format the output based on heroku guidelines
+# https://devcenter.heroku.com/articles/buildpack-api#style
+indent() {
+  RE="s/^/       /"
+  sed $SED_FLAG "$RE"
+}
+
+echo "\n-----> Using neuron v${NEURON_VERSION}"
+
+mkdir -p "$BUILD_DIR" "$CACHE_DIR"
+
+if ! [ -e "${CACHE_DIR}/${NEURON_TARBALL}" ]; then
+  echo "\n-----> Downloading package"
+  curl "$NEURON_PACKAGE" -Lso "${CACHE_DIR}/${NEURON_TARBALL}" | indent
+fi
+
+echo "\n-----> Extracting neuron binaries to ${BUILD_DIR}"
+tar xzf "${CACHE_DIR}/${NEURON_TARBALL}" -C "$CACHE_DIR" | indent
+
+echo "\n-----> Building the site"
+cd "$BUILD_DIR"
+"${CACHE_DIR}/neuron" rib -o static | indent

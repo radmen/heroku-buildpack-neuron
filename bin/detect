@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir> <cache-dir>
+
+# vim: set ft=shell
+
+set -eo pipefail; [[ $TRACE ]] && set -x
+
+if [[ ! -f "$1/neuron.dhall" ]]; then
+  exit 1
+fi
+
+echo "Neuron Zettelkasten"
